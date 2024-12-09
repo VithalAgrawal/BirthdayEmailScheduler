@@ -11,12 +11,13 @@ const Dashboard = () => {
 
     // Fetch employee data from CSV via backend
     useEffect(() => {
-        const fetchBirthdays = async () => {
+        const fetchBirthdaysByMonth = async () => {
             try {
-                const response = await fetch('http://localhost:5000/api/birthdays');
+                const month = date.getMonth() + 1; 
+                const response = await fetch(`http://localhost:7373/api/admin/getBirthdaysByMonth/${month}`);
                 const data = await response.json();
 
-                // Create a birthday map where the date is the key 
+                // Create a birthday map where the date is the key
                 const birthdayMap = {};
                 data.forEach((employee) => {
                     const [year, month, day] = employee.birthday.split('-'); 
@@ -36,8 +37,9 @@ const Dashboard = () => {
             }
         };
 
-        fetchBirthdays();
-    }, []);
+        fetchBirthdaysByMonth();
+    }, [date]);
+
 
     const handleDateChange = (selectedDate) => {
         setDate(selectedDate);
@@ -86,7 +88,7 @@ const Dashboard = () => {
                     <p>Loading birthdays...</p>
                 ) : birthdayList.length > 0 ? (
                     <div>
-                        <h3>Happy Birthday to:</h3>
+                        <h3 className='birthday-header'>Happy Birthday to:</h3>
                         <div>
                             {birthdayList.map((name, index) => (
                                 <div key={index}>{name}</div>

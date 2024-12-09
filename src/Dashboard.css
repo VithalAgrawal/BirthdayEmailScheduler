@@ -8,6 +8,9 @@ body {
     padding-top: 12px;
     background-color: #f4f4f9;
 }
+.birthday-header{
+    padding-bottom: 10px;
+}
 /* Navbar Styling */
 .navbar {
     width: 100%;

@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import "./Statistics.css";
+import Refresh from "./refresh.png";
 
 const Statistics = () => {
   const [logs, setLogs] = useState([]);
   const [filter, setFilter] = useState("All");
+  const [resendMessage, setResendMessage] = useState(""); // Message for resend email status
 
   useEffect(() => {
     // Fetch email logs from backend
@@ -18,6 +21,31 @@ const Statistics = () => {
     if (filter === "All") return true;
     return log.status.toLowerCase() === filter.toLowerCase();
   });
+
+  // Resend Email Function
+  const handleResendEmail = async (employeeId) => {
+    try {
+      const response = await axios.post(
+        `http://localhost:7373/api/admin/resendFailedEmail/${employeeId}`
+      );
+
+      if (response.status === 200) {
+        // Update the logs state
+        setLogs((prevLogs) =>
+          prevLogs.map((log) =>
+            log.employeeId === employeeId
+              ? { ...log, status: "success", error: "" } // Change status to success
+              : log
+          )
+        );
+        setResendMessage("Email resent successfully!");
+      }
+    } catch (error) {
+      setResendMessage(
+        `Failed to resend email: ${error.response?.data || error.message}`
+      );
+    }
+  };
 
   return (
     <>
@@ -64,6 +92,7 @@ const Statistics = () => {
                 <th>Recipient</th>
                 <th>Status</th>
                 <th>Error (if any)</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -85,11 +114,21 @@ const Statistics = () => {
                       </span>
                     </td>
                     <td>{log.error || "N/A"}</td>
+                    <td className="row">
+                      {log.status.toLowerCase() === "failure" && (
+                        <button
+                          className="resend-button"
+                          onClick={() => handleResendEmail(log.employeeId)}
+                        >
+                          <img src={Refresh} alt="Retry" width="18px" height="18px" />
+                        </button>
+                      )}
+                    </td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan="5" className="no-data">
+                  <td colSpan="6" className="no-data">
                     No logs available.
                   </td>
                 </tr>
@@ -97,6 +136,9 @@ const Statistics = () => {
             </tbody>
           </table>
         </div>
+
+        {/* Resend Message */}
+        {resendMessage && <p className="resend-message">{resendMessage}</p>}
       </div>
     </>
   );

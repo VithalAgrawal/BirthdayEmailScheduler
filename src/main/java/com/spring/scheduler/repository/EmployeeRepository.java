@@ -22,7 +22,9 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	List<Employee> findUpcomingBirthdays(@Param("month") int month, @Param("day") int day);
 
     
+
 	 // New method to get all birthdays in a specified month
+
     @Query(value = "SELECT * FROM employees e WHERE EXTRACT(MONTH FROM e.birthday) = :month ORDER BY EXTRACT(DAY FROM e.birthday) ASC", nativeQuery = true)
     List<Employee> findAllBirthdaysInMonth(@Param("month") int month);
      

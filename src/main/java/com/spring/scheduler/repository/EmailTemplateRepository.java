@@ -11,16 +11,12 @@ import com.spring.scheduler.entities.EmailTemplate;
 @Repository
 public interface EmailTemplateRepository extends JpaRepository<EmailTemplate, Long> {
 
-    @Query(value = """
-        SELECT * 
-        FROM email_templates
-        WHERE NOT EXISTS (
-            SELECT 1 
-            FROM temp_used_template_ids 
-            WHERE email_templates.id = temp_used_template_ids.id
-        )
-        ORDER BY RANDOM()
-        LIMIT 1
-        """, nativeQuery = true)
-    EmailTemplate findRandomTemplateExcludingTempIds();
+    
+    @Query(value = "SELECT * FROM email_templates ORDER BY RANDOM() LIMIT 1", nativeQuery = true)
+    EmailTemplate findRandomTemplate();
+
+    @Query(value = "SELECT * FROM email_templates", nativeQuery = true)
+    List<EmailTemplate> findAllTemplates();
+
+
 }

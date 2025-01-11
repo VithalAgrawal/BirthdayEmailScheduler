@@ -8,7 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+
 import org.springframework.web.bind.annotation.PutMapping;
+
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -47,7 +49,10 @@ public class EmailSchedulerController {
     }
     
     
+
     // End point to get upcoming birthdays
+
+
     @GetMapping("/getUpcomingBirthdays")
     public ResponseEntity<List<Employee>> getUpcomingBirthdays() {
         LocalDate today = LocalDate.now();
@@ -56,7 +61,9 @@ public class EmailSchedulerController {
     }
     
     
+
     // End point to get all birthdays within a specified month
+
     @GetMapping("/getBirthdaysByMonth/{month}")
     public ResponseEntity<List<Employee>> getBirthdaysByMonth(@PathVariable int month) {
         List<Employee> monthlyBirthdays = employeeRepository.findAllBirthdaysInMonth(month);
@@ -64,7 +71,9 @@ public class EmailSchedulerController {
     }
     
     
- // End point to save an email template
+
+ // New endpoint to save an email template
+
     @PostMapping("/saveTemplate")
     public ResponseEntity<String> saveEmailTemplate(@RequestBody EmailTemplate emailTemplate) {
         try {
@@ -80,7 +89,9 @@ public class EmailSchedulerController {
     }
     
     
+
     // End point to fetch emailLogs..
+
     @GetMapping("/getEmailLogs")
     public ResponseEntity<List<EmailLog>> getEmailLogs(@RequestParam(required = false) String status) {
         try {
@@ -98,6 +109,7 @@ public class EmailSchedulerController {
             return ResponseEntity.status(500).body(null); // Return an appropriate error response
         }
     }
+
     
     // End point for resending the failed emails....
     @PostMapping("/resendFailedEmail/{employeeId}")
@@ -152,6 +164,7 @@ public class EmailSchedulerController {
             return ResponseEntity.status(500).body("Error updating template: " + e.getMessage());
         }
     }
+
 
 
     

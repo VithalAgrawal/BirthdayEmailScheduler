@@ -14,7 +14,7 @@ import com.spring.scheduler.entities.Employee;
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
-     // bdays on a particular date selected..
+
 	@Query(value = "SELECT * FROM employees e WHERE to_char(e.birthday, 'MM-DD') = to_char(CAST(:today AS date), 'MM-DD')", nativeQuery = true)
 	List<Employee> findByBirthday(@Param("today") Date today);
 	
@@ -22,7 +22,9 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	List<Employee> findUpcomingBirthdays(@Param("month") int month, @Param("day") int day);
 
     
-	 //Get all bdays in a specified month....
+
+	 // New method to get all birthdays in a specified month
+
     @Query(value = "SELECT * FROM employees e WHERE EXTRACT(MONTH FROM e.birthday) = :month ORDER BY EXTRACT(DAY FROM e.birthday) ASC", nativeQuery = true)
     List<Employee> findAllBirthdaysInMonth(@Param("month") int month);
      

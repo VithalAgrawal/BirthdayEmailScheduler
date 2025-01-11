@@ -15,7 +15,11 @@ public class EmailTemplate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
   
+
+    private String subject;
+
     @Column(name = "message_body")
     @JsonProperty("message_body")
     private String messageBody;
@@ -30,6 +34,14 @@ public class EmailTemplate {
 		this.id = id;
 	}
 	
+
+	public String getSubject() {
+		return subject;
+	}
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
+
 	public String getMessageBody() {
 		return messageBody;
 	}
@@ -43,9 +55,13 @@ public class EmailTemplate {
 		this.imageUrl = imageUrl;
 	}
 	
-	public EmailTemplate(Long id, String messageBody, String imageUrl) {
+
+
+	public EmailTemplate(Long id, String subject, String messageBody, String imageUrl) {
 		super();
 		this.id = id;
+		this.subject = subject;
+
 		this.messageBody = messageBody;
 		this.imageUrl = imageUrl;
 	}
